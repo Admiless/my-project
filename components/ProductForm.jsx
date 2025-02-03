@@ -4,19 +4,18 @@ export default function ProductForm() {
   const [data, setData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [recentEntries, setRecentEntries] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
-  // Загружаем список продуктов с сервера Vercel
+  // Загружаем данные из API
   useEffect(() => {
     fetch("/api/products")
       .then((res) => res.json())
       .then(setData);
   }, []);
 
-  // Фильтрация продуктов при вводе
+  // Фильтрация по введенным символам
   useEffect(() => {
-    const products = data.slice(1).map((row) => row[0]); // Столбец с продуктами
+    const products = data.slice(1).map((row) => row[3]); // Берет из столбца D
     setFilteredProducts(
       products.filter((p) =>
         p?.toLowerCase().includes(selectedProduct.toLowerCase())
@@ -24,7 +23,7 @@ export default function ProductForm() {
     );
   }, [selectedProduct, data]);
 
-  // Отправка данных на сервер
+  // Отправка данных в API
   const handleSubmit = async () => {
     if (!selectedProduct || !quantity) return;
 
@@ -46,10 +45,9 @@ export default function ProductForm() {
     <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md text-center flex flex-col items-center text-lg">
       <h2 className="text-2xl font-bold text-center mb-8">Добавить количество продукта</h2>
 
-      {/* Поле выбора продукта с возможностью ввода */}
+      {/* Поле выбора продукта */}
       <div className="mb-12 w-full flex flex-col items-center">
         <label className="block mb-3">Продукт:</label>
-        <div className="h-8"></div>
         <input
           className="w-3/4 p-2 border rounded"
           type="text"
@@ -68,7 +66,6 @@ export default function ProductForm() {
       {/* Поле ввода количества */}
       <div className="mb-12 w-full flex flex-col items-center">
         <label className="block mb-3">Количество (например, 4+2+6):</label>
-        <div className="h-8"></div>
         <input
           className="w-3/4 p-2 border rounded"
           type="text"
@@ -79,19 +76,9 @@ export default function ProductForm() {
 
       {/* Кнопка добавления */}
       <div className="mb-12 w-full flex flex-col items-center">
-        <div className="h-8"></div>
         <button className="w-3/4 bg-green-500 text-white p-2 rounded" onClick={handleSubmit}>
           Добавить
         </button>
-      </div>
-
-      {/* Последние записи */}
-      <div className="mt-12 w-full flex flex-col items-center">
-        <h3 className="font-semibold">Последние записи:</h3>
-        <div className="h-8"></div>
-        {recentEntries.map(([product, amount], index) => (
-          <p key={index}>{product}: {amount}</p>
-        ))}
       </div>
 
       {/* Кнопка скачивания Excel */}
