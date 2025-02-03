@@ -41,11 +41,12 @@ export default function ProductForm() {
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-4">Добавить количество продукта</h2>
+    <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md text-center">
+      <h2 className="text-2xl font-bold text-center mb-8">Добавить количество продукта</h2>
       
-      <div className="mb-6">
-        <label>Продукт:</label>
+      <div className="mb-12">
+        <label className="block mb-3">Продукт:</label>
+        <div className="h-8"></div>
         <select className="w-full p-2 border rounded" value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
           {filteredProducts.map((product, index) => (
             <option key={index} value={product}>{product}</option>
@@ -53,17 +54,20 @@ export default function ProductForm() {
         </select>
       </div>
 
-      <div className="mb-6">
-        <label>Количество (например, 4+2+6):</label>
+      <div className="mb-12">
+        <label className="block mb-3">Количество (например, 4+2+6):</label>
+        <div className="h-8"></div>
         <input className="w-full p-2 border rounded" type="text" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
       </div>
 
-      <div className="mb-6">
+      <div className="mb-12">
+        <div className="h-8"></div>
         <button className="w-full bg-green-500 text-white p-2 rounded" onClick={handleSubmit}>Добавить</button>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-12">
         <h3 className="font-semibold">Последние записи:</h3>
+        <div className="h-8"></div>
         {recentEntries.map(([product, amount], index) => (
           <p key={index}>{product}: {amount}</p>
         ))}
@@ -71,4 +75,3 @@ export default function ProductForm() {
     </div>
   );
 }
-
