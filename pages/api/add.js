@@ -1,31 +1,46 @@
 import fs from "fs";
+import path from "path";
 import { read, utils, writeFile } from "xlsx";
 
-const FILE_PATH = "public/products.xlsx";
+const FILE_PATH = path.join(process.cwd(), "public/products.xlsx");
 
 export default function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).send("Метод не разрешён");
-
-  const { product, quantity } = req.body;
-  if (!product || !quantity) return res.status(400).send("Неверные данные");
-
-  const buffer = fs.existsSync(FILE_PATH) ? fs.readFileSync(FILE_PATH) : null;
-  const workbook = buffer ? read(buffer, { type: "buffer" }) : utils.book_new();
-  const sheet = workbook.Sheets[workbook.SheetNames[0]] || utils.aoa_to_sheet([["Product", "Quantity"]]);
-  const data = utils.sheet_to_json(sheet, { header: 1 });
-
-  // Находим продукт и добавляем количество
-  const index = data.findIndex((row) => row[0] === product);
-  if (index === -1) {
-    data.push([product, quantity]);
-  } else {
-    data[index][1] = eval(`${data[index][1]} + ${quantity}`);
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Метод не разрешён" });
   }
 
-  // Обновляем Excel
-  const newSheet = utils.aoa_to_sheet(data);
-  workbook.Sheets[workbook.SheetNames[0]] = newSheet;
-  writeFile(workbook, FILE_PATH);
+  const { product, quantity } = req.body;
+  if (!product || !quantity) {
+    return res.status(400).json({ error: "Неверные данные" });
+  }
 
-  res.status(200).send("Данные обновлены");
-}
+  let workbook;
+  let data;
+
+  // Загружаем или создаём новый Excel-файл
+  if (fs.existsSync(FILE_PATH)) {
+    const buffer = fs.readFileSync(FILE_PATH);
+    workbook = read(buffer, { type: "buffer" });
+  } else {
+    workbook = utils.book_new();
+  }
+
+  const sheetName = workbook.SheetNames[0] || "Products";
+  let sheet = workbook.Sheets[sheetName];
+
+  if (!sheet) {
+    sheet = utils.aoa_to_sheet([["Product", "", "", "Название", "", "Количество"]]);
+    workbook.Sheets[sheetName] = sheet;
+  }
+
+  data = utils.sheet_to_json(sheet, { header: 1 });
+
+  // Находим продукт по названию в столбце D (3-й индекс)
+  const index = data.findIndex((row) => row[3] === product);
+
+  if (index === -1) {
+    // Если продукта нет, добавляем новую строку
+    data.push(["", "", "", product, "", quantity]);
+  } else {
+    // Если продукт есть, обновляем его количество в столбце F (5-й индекс)
+ 
