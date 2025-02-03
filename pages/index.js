@@ -1,4 +1,4 @@
-import ProductForm from "@/components/ProductForm";
+import ProductForm from "@../omponents/ProductForm";
 
 export default function Home() {
   return (
