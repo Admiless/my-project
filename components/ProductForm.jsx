@@ -43,18 +43,26 @@ export default function ProductForm() {
   return (
     <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md">
       <h2 className="text-2xl font-bold text-center mb-4">Добавить количество продукта</h2>
-      <label>Продукт:</label>
-      <select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
-        {filteredProducts.map((product, index) => (
-          <option key={index} value={product}>{product}</option>
-        ))}
-      </select>
-      <label>Количество (например, 4+2+6):</label>
-      <input type="text" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-      <button className="mt-4 w-full bg-green-500 text-white p-2 rounded" onClick={handleSubmit}>
-        Добавить
-      </button>
-      <div className="mt-4">
+      
+      <div className="mb-6">
+        <label>Продукт:</label>
+        <select className="w-full p-2 border rounded" value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
+          {filteredProducts.map((product, index) => (
+            <option key={index} value={product}>{product}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mb-6">
+        <label>Количество (например, 4+2+6):</label>
+        <input className="w-full p-2 border rounded" type="text" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+      </div>
+
+      <div className="mb-6">
+        <button className="w-full bg-green-500 text-white p-2 rounded" onClick={handleSubmit}>Добавить</button>
+      </div>
+
+      <div className="mt-6">
         <h3 className="font-semibold">Последние записи:</h3>
         {recentEntries.map(([product, amount], index) => (
           <p key={index}>{product}: {amount}</p>
