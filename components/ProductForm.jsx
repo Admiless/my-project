@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { read, utils, writeFile } from "xlsx";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
-import { Select, SelectItem } from "../components/ui/select";
+import { Input } from "/components/ui/input";
+import { Button } from "/components/ui/button";
+import { Select, SelectItem } from "/components/ui/select";
 
 export default function ProductForm() {
   const [data, setData] = useState([]);
