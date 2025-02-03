@@ -1,7 +1,8 @@
 import fs from "fs";
+import path from "path";
 import { read, utils } from "xlsx";
 
-const FILE_PATH = "public/products.xlsx";
+const FILE_PATH = path.join(process.cwd(), "public/products.xlsx");
 
 export default function handler(req, res) {
   if (!fs.existsSync(FILE_PATH)) {
