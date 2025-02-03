@@ -43,4 +43,15 @@ export default function handler(req, res) {
     data.push(["", "", "", product, "", quantity]);
   } else {
     // Если продукт есть, обновляем его количество в столбце F (5-й индекс)
- 
+    const oldValue = data[index][5] || "0";
+    const newValue = eval(`${oldValue} + ${quantity}`);
+    data[index][5] = newValue;
+  }
+
+  // Записываем обновленные данные обратно в Excel
+  const newSheet = utils.aoa_to_sheet(data);
+  workbook.Sheets[sheetName] = newSheet;
+  writeFile(workbook, FILE_PATH);
+
+  res.status(200).json({ message: "Данные обновлены", data });
+}
